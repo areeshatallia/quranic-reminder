@@ -20,7 +20,7 @@ async function fetchDailyAyat() {
       const dataUrdu = await responseUrdu.json();
       urduElement.innerText = dataUrdu.status === 'OK' ? dataUrdu.data.text : 'Unable to fetch Urdu.';
 
-      showNotification("New Quranic Ayah Loaded!");
+      showNotification("🌸 New Quranic Ayah Loaded!");
     } else {
       arabicElement.innerText = 'Unable to fetch Ayah.';
     }
@@ -41,5 +41,4 @@ if (Notification.permission !== "granted") {
 
 }
 
-// Load Ayat on page load
 fetchDailyAyat();
