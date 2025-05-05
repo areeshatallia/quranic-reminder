@@ -9,18 +9,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(function(registration) {
-        console.log('Service Worker registered with scope:', registration.scope);
-      }).catch(function(error) {
-        console.log('Service Worker registration failed:', error);
-      });
-  }
-</script>
+   <!-- Manifest file link -->
+   <link rel="manifest" href="manifest.json">
 
+   <!-- Favicon (icon for browser tab) -->
+   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/888/888879.png" type="image/png">
+ 
+   <!-- Service Worker Registration -->
+   <script>
+     if ('serviceWorker' in navigator) {
+       navigator.serviceWorker.register('service-worker.js')
+         .then(function(registration) {
+           console.log('Service Worker registered with scope:', registration.scope);
+         }).catch(function(error) {
+           console.log('Service Worker registration failed:', error);
+         });
+     }
+   </script>
 </head>
 <body>
 
