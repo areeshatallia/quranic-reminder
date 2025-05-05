@@ -9,23 +9,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
-   <!-- Manifest file link -->
-   <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/888/888879.png" type="image/png">
 
-   <!-- Favicon (icon for browser tab) -->
-   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/888/888879.png" type="image/png">
- 
-   <!-- Service Worker Registration -->
-   <script>
-     if ('serviceWorker' in navigator) {
-       navigator.serviceWorker.register('service-worker.js')
-         .then(function(registration) {
-           console.log('Service Worker registered with scope:', registration.scope);
-         }).catch(function(error) {
-           console.log('Service Worker registration failed:', error);
-         });
-     }
-   </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(function(registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+        }).catch(function(error) {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+  </script>
 </head>
 <body>
 
@@ -38,23 +33,11 @@
     <p class="ayat" id="ayat-english">Loading English...</p>
     <p class="ayat" id="ayat-urdu">Loading Urdu...</p>
   </div>
-  <button id="install-btn" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; border: none; border-radius: 8px; background-color: #00695c; color: white; cursor: pointer;">
-    Install Quranic Reminder
-  </button>
-  
+
   <footer>
     &copy; 2025 Quranic Reminder
   </footer>
 
   <script src="script.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(function(registration) {
-          console.log('Service Worker Registered');
-        });
-    }
-  </script>
-
 </body>
 </html>

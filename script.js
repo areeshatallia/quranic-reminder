@@ -38,29 +38,8 @@ function showNotification(message) {
 
 if (Notification.permission !== "granted") {
   Notification.requestPermission();
+
 }
 
 // Load Ayat on page load
 fetchDailyAyat();
-let deferredPrompt;
-const installBtn = document.getElementById('install-btn');
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevent the default mini-infobar
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = 'block'; // Show the install button
-});
-
-installBtn.addEventListener('click', async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt');
-    } else {
-      console.log('User dismissed the install prompt');
-    }
-    deferredPrompt = null;
-  }
-});
