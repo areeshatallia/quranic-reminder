@@ -42,3 +42,51 @@ if (Notification.permission !== "granted") {
 }
 
 fetchDailyAyat();
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Create Install Button
+  const installButton = document.createElement('button');
+  installButton.innerText = '📲 Install Quranic Reminder';
+  installButton.style.position = 'fixed';
+  installButton.style.bottom = '20px';
+  installButton.style.left = '50%';
+  installButton.style.transform = 'translateX(-50%)';
+  installButton.style.padding = '12px 25px';
+  installButton.style.backgroundColor = '#4CAF50';
+  installButton.style.color = 'white';
+  installButton.style.fontSize = '16px';
+  installButton.style.fontWeight = 'bold';
+  installButton.style.border = 'none';
+  installButton.style.borderRadius = '30px';
+  installButton.style.boxShadow = '0px 4px 12px rgba(0,0,0,0.2)';
+  installButton.style.cursor = 'pointer';
+  installButton.style.zIndex = '1000';
+  installButton.style.transition = '0.3s all ease-in-out';
+  
+  installButton.addEventListener('mouseover', () => {
+    installButton.style.backgroundColor = '#45a049';
+  });
+  installButton.addEventListener('mouseout', () => {
+    installButton.style.backgroundColor = '#4CAF50';
+  });
+
+  document.body.appendChild(installButton);
+
+  installButton.addEventListener('click', () => {
+    installButton.remove();
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted install');
+      } else {
+        console.log('User dismissed install');
+      }
+      deferredPrompt = null;
+    });
+  });
+});
