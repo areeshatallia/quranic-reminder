@@ -7,14 +7,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
-
-
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(function(registration) {
+        console.log('Service Worker registered with scope:', registration.scope);
+      }).catch(function(error) {
+        console.log('Service Worker registration failed:', error);
+      });
+  }
+</script>
+
 </head>
 <body>
-
-
-  
 
   <header>
     <h1>🌸 Quranic Reminder</h1>
@@ -24,23 +32,21 @@
     <p class="ayat" id="ayat-arabic">Loading Arabic...</p>
     <p class="ayat" id="ayat-english">Loading English...</p>
     <p class="ayat" id="ayat-urdu">Loading Urdu...</p>
-  
-    <button id="read-more">Read More (Tafseer)</button>
-  
-    <div id="tafseer" style="display: none; margin-top: 10px; font-family: 'Noto Nastaliq Urdu', serif; font-size: 18px;">
-      <!-- Tafseer yahan show hogi -->
-    </div>
   </div>
-  
-  
-
-  
 
   <footer>
     &copy; 2025 Quranic Reminder
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(function(registration) {
+          console.log('Service Worker Registered');
+        });
+    }
+  </script>
 
 </body>
 </html>
