@@ -2,6 +2,7 @@ const arabicElement = document.getElementById('ayat-arabic');
 const englishElement = document.getElementById('ayat-english');
 const urduElement = document.getElementById('ayat-urdu');
 
+// Fetch Ayah
 async function fetchDailyAyat() {
   try {
     const responseArabic = await fetch('https://api.alquran.cloud/v1/ayah/random');
@@ -9,47 +10,92 @@ async function fetchDailyAyat() {
 
     if (dataArabic.status === 'OK') {
       const ayahNumber = dataArabic.data.number;
+      const ayahArabic = dataArabic.data.text;
 
-      arabicElement.innerText = dataArabic.data.text;
-
+      // Fetch English Translation
       const responseEnglish = await fetch(`https://api.alquran.cloud/v1/ayah/${ayahNumber}/en.asad`);
       const dataEnglish = await responseEnglish.json();
-      englishElement.innerText = dataEnglish.status === 'OK' ? dataEnglish.data.text : 'Unable to fetch English.';
+      const ayahEnglish = dataEnglish.status === 'OK' ? dataEnglish.data.text : 'Unable to fetch English.';
 
+      // Fetch Urdu Translation
       const responseUrdu = await fetch(`https://api.alquran.cloud/v1/ayah/${ayahNumber}/ur.jalandhry`);
       const dataUrdu = await responseUrdu.json();
-      urduElement.innerText = dataUrdu.status === 'OK' ? dataUrdu.data.text : 'Unable to fetch Urdu.';
+      const ayahUrdu = dataUrdu.status === 'OK' ? dataUrdu.data.text : 'Unable to fetch Urdu.';
 
-      showNotification("🌸 New Quranic Ayah Loaded!");
+      const ayahData = {
+        arabic: ayahArabic,
+        english: ayahEnglish,
+        urdu: ayahUrdu,
+        fetchedAt: new Date().getTime()
+      };
+
+      localStorage.setItem('dailyAyah', JSON.stringify(ayahData));
+      displayAyah(ayahData);
+      showNotification(ayahEnglish);
     } else {
-      arabicElement.innerText = 'Unable to fetch Ayah.';
+      showError();
     }
   } catch (error) {
-    console.error('Error fetching Ayat:', error);
-    arabicElement.innerText = 'Unable to fetch Ayah.';
+    console.error('Error fetching Ayah:', error);
+    showError();
   }
 }
 
+// Display Ayah
+function displayAyah(ayahData) {
+  arabicElement.innerText = ayahData.arabic;
+  englishElement.innerText = ayahData.english;
+  urduElement.innerText = ayahData.urdu;
+}
+
+// Show Notification
 function showNotification(message) {
-  if (Notification.permission === "granted") {
-    new Notification(message);
+  if (Notification.permission === 'granted') {
+    new Notification('📖 Today\'s Quranic Reminder', {
+      body: message,
+      icon: 'quran', // apna icon file
+      badge: 'quran' // optional small badge
+    });
   }
 }
 
-if (Notification.permission !== "granted") {
-  Notification.requestPermission();
-
+// Error handling
+function showError() {
+  arabicElement.innerText = 'Unable to fetch Ayah.';
+  englishElement.innerText = '';
+  urduElement.innerText = '';
 }
 
-fetchDailyAyat();
+// Load Ayah
+function loadDailyAyat() {
+  const storedData = JSON.parse(localStorage.getItem('dailyAyah'));
+  const now = new Date().getTime();
+  const oneDay = 24 * 60 * 60 * 1000;
 
+  if (storedData && (now - storedData.fetchedAt) < oneDay) {
+    displayAyah(storedData);
+  } else {
+    fetchDailyAyat();
+  }
+}
+
+// Notification permission
+if ('Notification' in window) {
+  if (Notification.permission !== 'granted') {
+    Notification.requestPermission();
+  }
+}
+
+// Fetch Ayah
+loadDailyAyat();
+
+// Install App Button
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
 
-  // Create Install Button
   const installButton = document.createElement('button');
   installButton.innerText = '📲 Install Quranic Reminder';
   installButton.style.position = 'fixed';
@@ -67,7 +113,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   installButton.style.cursor = 'pointer';
   installButton.style.zIndex = '1000';
   installButton.style.transition = '0.3s all ease-in-out';
-  
+
   installButton.addEventListener('mouseover', () => {
     installButton.style.backgroundColor = '#45a049';
   });
@@ -90,3 +136,13 @@ window.addEventListener('beforeinstallprompt', (e) => {
     });
   });
 });
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(function(registration) {
+      console.log('Service Worker registered with scope:', registration.scope);
+    })
+    .catch(function(error) {
+      console.error('Service Worker registration failed:', error);
+    });
+}
